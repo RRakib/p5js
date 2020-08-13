@@ -5,7 +5,7 @@ let changingVal = null;
 
 function setup(){
     createCanvas(window.innerWidth, window.innerHeight);
-    frameRate(10);
+    frameRate(20);
     for(let i = 0; i < width / 10; i++){
         values.push(random(height / 1.5))
     }
@@ -25,13 +25,14 @@ function draw(){
         }
     });
     if(i < values.length){
-        let temp = values[i];
         let j = i;
+        let temp = values[j];
         while(j > 0 && temp < values[j - 1]){
             changingVal = j - 1;
             values[j] = values[j - 1];
             j = j - 1
         }
+        console.log(values)
         values[j] = temp;
         i++;
     } else {
