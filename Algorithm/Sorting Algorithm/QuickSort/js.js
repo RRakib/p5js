@@ -60,8 +60,8 @@ function partition(arr, start, end){
                 i += 1;
             }
        }
-       swap ( arr[ start ] ,arr[ i-1 ] ) ;
-       return i-1;
+    swap ( arr[ start ] ,arr[ i-1 ] ) ;
+    return i-1;
 }
 
 let swap = function(arr, firstInd, secInd){
