@@ -1,4 +1,4 @@
-let data = {
+{
     "movies": [{
             "title": "Diner",
             "cast": [
@@ -94,62 +94,4 @@ let data = {
             ]
         }
     ]
-}
-let graph;
-
-
-function setup(){
-    noCanvas();
-    graph = new Graph();
-    data.movies.forEach(item => {
-        let movie = item.title;
-        let cast = item.cast;
-        let movieNode = new Node(movie);
-        graph.addNode(movieNode);
-
-        item.cast.forEach(item => {
-            let actorNode = graph.getActor(item);
-            if(actorNode === undefined) {
-                actorNode = new Node(item)
-            }
-            graph.addNode(actorNode)
-            movieNode.addEdge(actorNode)
-        })
-    })
-    console.log(graph)
-}
-
-
-function draw(){}
-
-
-class Node{
-    constructor(value) {
-        this.value = value;
-        this.edges = [];
-        this.searched = false;
-        this.parent = null;
-    }
-
-    addEdge(node){
-        this.edges.push(node);
-        node.edges.push(this);
-    }
-}
-
-
-class Graph{
-    constructor() {
-        this.node = [];
-        this.graphs = {};
-    }
-
-    addNode(n){
-        this.node.push(n);
-        this.graphs[n.value] = n;
-    }
-
-    getActor(actorName){
-        return this.graphs[actorName]
-    }
 }
