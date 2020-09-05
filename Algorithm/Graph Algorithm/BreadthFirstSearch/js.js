@@ -96,15 +96,19 @@ let data = {
     ]
 }
 let graph;
+let path = [];
 
 
 function setup(){
-    noCanvas();
+    createCanvas(window.innerWidth, window.innerHeight)
     graph = new Graph();
-    data.movies.forEach(item => {
+    data.movies.forEach((item, index) => {
         let movie = item.title;
         let cast = item.cast;
         let movieNode = new Node(movie);
+        movieNode.setMovie();
+        movieNode.setYPos(random(height));
+        movieNode.setXPos(random(width))
         graph.addNode(movieNode);
 
         item.cast.forEach(item => {
@@ -114,13 +118,72 @@ function setup(){
             }
             graph.addNode(actorNode)
             movieNode.addEdge(actorNode)
+            actorNode.setYPos(random(height));
+            actorNode.setXPos(random(width))
         })
     })
+    
+    let start = graph.startNode("Mike O 'Malley");
+    let end = graph.endNode('Kevin Bacon');
+
+    let queue = [];
+    start.searched = true;
+    queue.push(start);
+
+    while(queue.length > 0){
+        let current = queue.shift();
+        if(current === end) {
+            console.log('Found ' + current.value);
+            break;
+        }
+        current.edges.forEach(item => {
+            if(!item.searched){
+                item.searched = true;
+                item.parent = current;
+                queue.push(item)
+            }
+        })
+    }
+
+    let p = '';
+    path.unshift(end);
+    let next = end.parent;
+    while(next !== null){
+        path.unshift(next);
+        next = next.parent
+    }
+
     console.log(graph)
 }
 
 
-function draw(){}
+
+function draw(){
+    background('white')
+    graph.node.forEach((item, index) => {
+        push()
+        if(item.isMovie){
+            fill('#ccc')
+            stroke('#ccc')
+            circle(item.xPos,  item.yPos, 80);
+            item.edges.forEach((items, index) => {
+                circle(items.xPos, items.yPos, 20)
+                line(items.xPos, items.yPos, item.xPos, item.yPos)
+            })
+        }
+        pop()
+    })
+    path.forEach((item, index) => {
+        push()
+        fill('red')
+        stroke('red')
+        strokeWeight(3)
+        circle(item.xPos, item.yPos, item.isMovie ? 80 : 20);
+        line(item.xPos, item.yPos, path[index + 1].xPos, path[index + 1].yPos)
+        pop()
+    })
+}
+
 
 
 class Node{
@@ -129,19 +192,45 @@ class Node{
         this.edges = [];
         this.searched = false;
         this.parent = null;
+        this.isMovie = false;
+        this.yPos = null;
+        this.xPos = null;
     }
 
     addEdge(node){
         this.edges.push(node);
         node.edges.push(this);
     }
+
+    setMovie(){
+        this.isMovie = true
+    }
+
+    setYPos(y){
+        this.yPos = y
+    }
+
+    setXPos(x){
+        this.xPos = x
+    }
 }
+
 
 
 class Graph{
     constructor() {
         this.node = [];
         this.graphs = {};
+        this.start = null;
+        this.end = null;
+    }
+
+    startNode(start){
+        return this.graphs[start]
+    }
+
+    endNode(end){
+        return this.graphs[end]
     }
 
     addNode(n){
