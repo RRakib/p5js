@@ -97,6 +97,8 @@ let data = {
 }
 let graph;
 let path = [];
+let end = null;
+let next = null;
 
 
 function setup(){
@@ -123,8 +125,8 @@ function setup(){
         })
     })
     
-    let start = graph.startNode("Mike O 'Malley");
-    let end = graph.endNode('Kevin Bacon');
+    let start = graph.startNode("Neal Huff");
+    end = graph.endNode('Kevin Bacon');
 
     let queue = [];
     start.searched = true;
@@ -144,22 +146,19 @@ function setup(){
             }
         })
     }
-
-    let p = '';
     path.unshift(end);
-    let next = end.parent;
-    while(next !== null){
-        path.unshift(next);
-        next = next.parent
-    }
-
-    console.log(graph)
+    frameRate(1.5)
+    next = end.parent;
 }
 
 
 
 function draw(){
     background('white')
+    if(next !== null){
+        path.unshift(next);
+        next = next.parent
+    }
     graph.node.forEach((item, index) => {
         push()
         if(item.isMovie){
@@ -173,13 +172,13 @@ function draw(){
         }
         pop()
     })
-    path.forEach((item, index) => {
+    path.length > 0 && path.forEach((item, index) => {
         push()
         fill('red')
         stroke('red')
         strokeWeight(3)
         circle(item.xPos, item.yPos, item.isMovie ? 80 : 20);
-        line(item.xPos, item.yPos, path[index + 1].xPos, path[index + 1].yPos)
+        line(item.xPos, item.yPos, path[index + 1 === path.length ? index - 1 : index + 1].xPos, path[index + 1 === path.length ? index - 1 : index + 1].yPos)
         pop()
     })
 }
