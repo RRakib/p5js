@@ -2,7 +2,7 @@ let particles = [];
 
 function setup(){
     createCanvas(window.innerWidth, window.innerHeight);
-    for(let i = 0; i < 50; i++){
+    for(let i = 0; i < 200; i++){
         particles.push(new Particles(random(width), random(height)))
     }
 }
@@ -37,14 +37,16 @@ class Particles{
         } else if(this.y + 2.5 > height || this.y - 2.5 <= 0){
             this.dy = -this.dy
         }
-
         this.otherParticles.forEach(item => {
-            if(this.x - item.x < 4 && this.x - item.x !== 0 && this.x - item.x > -4 ){
+            if((this.x - item.x <= 8 && this.x - item.x >= -8 && this.x - item.x !== 0) && (this.y - item.y <= 8 && this.y - item.y >= -8 && this.y - item.y !== 0)){
                 this.dx = -this.dx
-            } else if(this.y - item.y < 4 && this.y - item.y !== 0 && this.y - item.y >= -4) {
                 this.dy = -this.dy
+                item.dx = -item.dx
+                item.dy = -item.dy
             }
         })
+
+
         this.drawParticles()
     }
 
