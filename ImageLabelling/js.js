@@ -1,7 +1,7 @@
 let img;
 
 function preload(){
-    img = loadImage('./ImageFiltering/test.jpg');
+    img = loadImage('./ImageLabelling/test.jpg');
 }
 
 function setup(){
@@ -12,3 +12,11 @@ function setup(){
 function draw(){
 
 }
+
+function mouseWheel(event) {
+    print(event.delta);
+    //move the square according to the vertical scroll amount
+    pos += event.delta;
+    //uncomment to block page scrolling
+    //return false;
+  }
