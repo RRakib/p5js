@@ -24,14 +24,16 @@ function preload(){
 
 function setup(){
     canv = createCanvas(window.innerWidth, window.innerHeight);
+    imageMode(CENTER)
 }
 
 function draw(){
-    scale(scaleVal);
-    push()
-    // translate(width / 2, height / 2)
     background('white')
-    // imageMode(CENTER)
+    translate(width / 2,
+              height / 2)
+    push()
+    scale(scaleVal, scaleVal, scaleVal);
+    background('white')
     image(img, imgX, imgY, 800, 1000);
     pop()
 
@@ -40,6 +42,7 @@ function draw(){
         noFill();
         stroke('red');
         strokeWeight(5);
+        circle(startX, startY, 20)
         rect(startX, startY, endX - startX, endY - startY);
     })
 }
@@ -69,14 +72,14 @@ function mouseDragged() {
 function mousePressed() {
     if(!drag){
         console.log('asdf')
-        rectArrays.push({startX: mouseX, startY: mouseY});
+        rectArrays.push({startX: mouseX - width / 2, startY: mouseY - height / 2});
     }
 }
 
 function mouseReleased() {
     if(!drag){
-        rectArrays[rectArrays.length - 1]['endX'] = mouseX;
-        rectArrays[rectArrays.length - 1]['endY'] = mouseY;
+        rectArrays[rectArrays.length - 1]['endX'] = mouseX - width / 2;
+        rectArrays[rectArrays.length - 1]['endY'] = mouseY - height / 2;
         console.log(rectArrays[rectArrays.length - 1], 27);
     }
 }
